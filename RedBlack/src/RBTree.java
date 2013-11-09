@@ -1,3 +1,4 @@
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -6,11 +7,12 @@ import java.io.IOException;
 import java.util.Scanner;
 
 
-public class RBTree<K extends Comparable<? super K>,V>
+public class RBTree <K extends Comparable<? super K>,V>
 {
     public static final boolean VERIFY_RBTREE = true;
     private static final int INDENT_STEP = 4;
-
+   
+    public String K,V;
     public Node<K,V> root;
 
     public RBTree() {
@@ -83,8 +85,8 @@ public class RBTree<K extends Comparable<? super K>,V>
         }
         return n;
     }
-    public String lookup(K key) {
-        Node<K,V> n = lookupNode(key);
+    public String lookup(String x) {
+        Node<K,V> n = lookupNode((K) x);//add cast
         return n == null ? null : n.value;
     }
     private void rotateLeft(Node<K,V> n) {
@@ -121,14 +123,14 @@ public class RBTree<K extends Comparable<? super K>,V>
             newn.parent = oldn.parent;
         }
     }
-    public void insert(K key, String value) {
-        Node<K,V> insertedNode = new Node<K,V>(key, value, Color.RED, null, null);
+    public void insert(String key, String value) {//change to String
+        Node<K,V> insertedNode = new Node<K,V>((K) key, value, Color.RED, null, null);//add cast
         if (root == null) {
             root = insertedNode;
         } else {
             Node<K,V> n = root;
             while (true) {
-                int compResult = key.compareTo(n.key);
+                int compResult = key.compareTo((String) n.key);
                 if (compResult == 0) {
                     n.value = value;
                     return;
@@ -196,8 +198,8 @@ public class RBTree<K extends Comparable<? super K>,V>
             rotateLeft(n.grandparent());
         }
     }
-    public void delete(K key) {
-        Node<K,V> n = lookupNode(key);
+    public void delete(String x) {
+        Node<K,V> n = lookupNode((K) x);//add cast
         if (n == null)
             return;  // Key not found, do nothing
         if (n.left != null && n.right != null) {
@@ -329,11 +331,11 @@ public class RBTree<K extends Comparable<? super K>,V>
     	t.print();
 
     	try {
-    		File arquivo = new File( "D:/Meus Documentos/SENAC/7º Semestre/Algoritimos de programação 3/import_2.txt" );
+    		File arquivo = new File( "C:/Users/Rodrigo/workspace/RedBlack/src/import.txt" );
     		BufferedReader bf = new BufferedReader(new FileReader(arquivo));
     		while(bf.ready()){
     			String[] array = bf.readLine().split("=");
-    			int key = Integer.valueOf(array[0]);
+    			String key = array[0];
     			String valor = array[1];
     			t.insert(key,valor);
     		}
@@ -360,7 +362,7 @@ public class RBTree<K extends Comparable<? super K>,V>
     		case "insere":
     			//insere 14 testeInsere
     			try{  
-    			    int x = Integer.parseInt(array[1]);  
+    			 String x = array[1];  
     			 String y = array[2];
     			 t.insert(x, y);
     			}catch(NumberFormatException e){  
@@ -370,8 +372,8 @@ public class RBTree<K extends Comparable<? super K>,V>
     		case "exclui":
     			//exclui 14
     			try{  
-    			    int x = Integer.parseInt(array[1]);  
-    			    t.delete(x);
+    				 String x = array[1];  
+    			     t.delete(x);
     			}catch(NumberFormatException e){  
     			  System.out.println("A chave deve ser um numero");
     			}
@@ -379,7 +381,7 @@ public class RBTree<K extends Comparable<? super K>,V>
     		case "consulta":
     			//consulta 14
     			try{  
-    			    int x = Integer.parseInt(array[1]);  
+    			    String x = array[1];  
     			    System.out.println("Chave : " + x + "  Valor : " + t.lookup(x));
     			    
     			}catch(NumberFormatException e){  
@@ -398,7 +400,7 @@ public class RBTree<K extends Comparable<? super K>,V>
     	}
     	
     	}
-    	public static void ajuda()
+    public static void ajuda()
     	{
     		System.out.println("Comandos:\n");
     		System.out.println("\tajuda\n");
